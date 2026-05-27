@@ -1,0 +1,164 @@
+@import "tailwindcss";
+
+/* React Flow styles */
+@import "@xyflow/react/dist/style.css";
+
+@theme {
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-display: 'Outfit', sans-serif;
+  --color-slate-850: #131e35;
+}
+
+/* Base Body Theme Colors */
+body {
+  background-color: #020617; /* slate-950 */
+  color: #f1f5f9; /* slate-100 */
+}
+
+/* Light Mode Variables Override - Reversing Slate Palette */
+.light {
+  --color-slate-950: #f8fafc; /* slate-50 */
+  --color-slate-900: #ffffff; /* white */
+  --color-slate-850: #f1f5f9; /* slate-100 */
+  --color-slate-800: #e2e8f0; /* slate-200 */
+  --color-slate-700: #cbd5e1; /* slate-300 */
+  --color-slate-600: #94a3b8; /* slate-400 */
+  --color-slate-500: #64748b; /* slate-500 */
+  --color-slate-400: #475569; /* slate-600 */
+  --color-slate-300: #334155; /* slate-700 */
+  --color-slate-200: #1e293b; /* slate-800 */
+  --color-slate-100: #0f172a; /* slate-900 */
+}
+
+/* Light mode specific element modifications */
+.light body {
+  background-color: var(--color-slate-950);
+  color: var(--color-slate-100);
+}
+
+/* Glassmorphism utility */
+.glass-panel {
+  background: rgba(30, 41, 59, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.light .glass-panel {
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
+}
+
+/* Glow effects */
+.glow-indigo {
+  box-shadow: 0 0 20px -5px rgba(99, 102, 241, 0.5);
+}
+
+.light .glow-indigo {
+  box-shadow: 0 4px 20px -5px rgba(99, 102, 241, 0.15);
+}
+
+.glow-emerald {
+  box-shadow: 0 0 20px -5px rgba(16, 185, 129, 0.5);
+}
+
+.glow-rose {
+  box-shadow: 0 0 20px -5px rgba(244, 63, 94, 0.5);
+}
+
+.glow-amber {
+  box-shadow: 0 0 20px -5px rgba(245, 158, 11, 0.5);
+}
+
+/* Concentric double circles for accept state */
+.double-circle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  background-color: inherit;
+}
+
+.double-circle::after {
+  content: '';
+  position: absolute;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+}
+
+/* Pulse animation for active simulation state */
+@keyframes statePulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0px rgba(250, 204, 21, 0.7);
+  }
+  50% {
+    transform: scale(1.08);
+    box-shadow: 0 0 15px 6px rgba(250, 204, 21, 0.4);
+  }
+}
+
+.pulse-active {
+  animation: statePulse 2s infinite ease-in-out;
+  border-color: #facc15 !important;
+  color: #facc15 !important;
+  font-weight: 700;
+}
+
+/* Running trace path animation */
+.animated-edge path {
+  stroke-dasharray: 5;
+  animation: flowEdge 0.8s linear infinite;
+  stroke-width: 3px !important;
+}
+
+@keyframes flowEdge {
+  from {
+    stroke-dashoffset: 20;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* React Flow Grid theme modifications */
+.react-flow__background path {
+  stroke: #334155 !important;
+}
+
+.light .react-flow__background path {
+  stroke: #cbd5e1 !important;
+}
+
+/* Scrollbars styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #020617; /* dark bg */
+}
+.light ::-webkit-scrollbar-track {
+  background: #f8fafc; /* light bg */
+}
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 4px;
+}
+.light ::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
+.light ::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
