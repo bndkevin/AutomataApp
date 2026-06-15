@@ -1,9 +1,10 @@
 import React from 'react';
-import { Cpu, Shuffle, Minimize2, CheckSquare, Sun, Moon } from 'lucide-react';
+import { Cpu, GitFork, Shuffle, Minimize2, CheckSquare, Sun, Moon } from 'lucide-react';
 
 export default function Navbar({ activeTab, setActiveTab, theme, toggleTheme }) {
   const tabs = [
     { id: 'dfa-simulator', label: 'DFA Simulator', icon: Cpu },
+    { id: 'nfa-simulator', label: 'NFA Simulator', icon: GitFork },
     { id: 'regex-nfa', label: 'Regex ➔ NFA', icon: Shuffle },
     { id: 'dfa-minimizer', label: 'DFA Minimizer', icon: Minimize2 },
     { id: 'dfa-equivalence', label: 'DFA Equivalence', icon: CheckSquare },

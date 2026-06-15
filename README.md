@@ -6,7 +6,7 @@ Aplikasi web interaktif satu halaman (Single Page Application) berbasis **Vite +
 
 ## 🚀 Fitur Utama & Modul Otomata
 
-Aplikasi ini mencakup **4 Modul Akademik** utama dalam Teori Bahasa & Automata:
+Aplikasi ini mencakup **5 Modul Akademik** utama dalam Teori Bahasa & Automata:
 
 ### 1. ⚙️ DFA Simulator
 *   **Editor Otomata Dinamis**: Konfigurasi State ($Q$), Alfabet ($\Sigma$), Start State ($q_0$), dan Accept States ($F$) secara instan menggunakan form interaktif.
@@ -14,18 +14,23 @@ Aplikasi ini mencakup **4 Modul Akademik** utama dalam Teori Bahasa & Automata:
 *   **Simulasi Interaktif & Penjelasan Bahasa Indonesia**: Uji string input Anda dengan mode **Langkah-demi-Langkah (Step-by-Step)** dengan kontrol Play/Pause/Skip otomatis.
 *   **Animasi Aliran Graf**: Lintasan transisi yang aktif akan **menyala berwarna kuning** dan berdenyut secara visual di atas graf.
 
-### 2. 🔀 Regex to NFA (Thompson's Construction)
+### 2. ⚙️ NFA Simulator
+*   **Editor NFA Dinamis**: Konfigurasi State, Alfabet, Start State, Accept States, dan Transisi NFA.
+*   **Dukungan Transisi Cabang & Epsilon ($\epsilon$)**: Input transisi bercabang (koma terpisah, misal `q0, q1`) dan transisi epsilon ($\epsilon$) langsung di tabel transisi.
+*   **Simulasi Subset Terintegrasi**: Simulasi interaktif menggunakan algoritma Epsilon-Closure & Subset Construction dengan visualisasi lintasan aktif (berwarna kuning).
+
+### 3. 🔀 Regex to NFA (Thompson's Construction)
 *   **Standard Regex AST Parser**: Mendukung parse ekspresi reguler dengan operator literal `a`, gabungan `a|b`, sekuensial `ab`, Kleene star `a*`, pengulangan positif `a+`, opsional `a?`, dan pengelompokan `(a|b)*`.
 *   **Thompson Construction Compiler**: Mengompilasi Regex menjadi graf NFA dengan transisi $\epsilon$ (epsilon) otomatis secara langsung.
 *   **NFA Subset Simulator**: Mensimulasikan string input pada NFA menggunakan metode **Epsilon-Closure & Subset Construction** di latar belakang.
 *   **Pembanding Mesin**: Menyediakan pembanding otomatis hasil pengujian menggunakan JavaScript Native RegExp.
 
-### 3. 🔍 DFA Minimizer (Hopcroft's Algorithm)
+### 4. 🔍 DFA Minimizer (Hopcroft's Algorithm)
 *   **Myhill-Nerode & Hopcroft Partitioning**: Menghilangkan state yang tidak dapat dijangkau (*unreachable states*) dari Start State, kemudian membagi himpunan state ke dalam kelas ekuivalen (*partition refinement*).
 *   **Visualisasi Komparatif Side-by-Side**: Menampilkan graf DFA asal dan graf DFA hasil minimalisasi secara bersandingan untuk memudahkan perbandingan.
 *   **Equivalence Classes & Round Logs**: Menampilkan tabel penggabungan kelas ekuivalensi (misal: $\{q_1, q_3\} \to Q_1$) serta rincian log pembagian partisi di setiap ronde iterasi.
 
-### 4. 🔏 DFA Equivalence Checker (Table-Filling Algorithm)
+### 5. 🔏 DFA Equivalence Checker (Table-Filling Algorithm)
 *   **Konstruksi Automaton Produk ($Q_1 \times Q_2$)**: Menggabungkan dua DFA berbeda (bisa dengan nama state berbeda) untuk mencari perbedaan bahasa.
 *   **Deteksi String Pembeda (Witness String)**: Jika kedua DFA tidak ekuivalen, algoritma BFS akan menemukan **string terpendek** yang diterima oleh salah satu DFA tetapi ditolak oleh DFA lainnya.
 *   **Visualisasi Graf Produk**: Menampilkan graf automaton produk beserta tanda double-circle hijau pada state yang membedakan (Symmetric Difference).
@@ -94,15 +99,17 @@ src/
 ├── index.css                ← Konfigurasi Tailwind v4 & style kustom (Light/Dark Mode)
 ├── components/
 │   ├── AutomataGraph.jsx    ← Komponen React Flow untuk visualisasi graf (Custom Node & Loops)
-│   ├── DFAInputForm.jsx     ← Form input matriks transisi δ DFA/NFA yang reusable
+│   ├── DFAInputForm.jsx     ← Form input matriks transisi δ DFA yang reusable
+│   ├── NFAInputForm.jsx     ← Form input matriks transisi δ NFA (mendukung koma-terpisah & epsilon)
 │   ├── TransitionTable.jsx  ← Render tabel δ dinamis untuk DFA dan NFA
 │   ├── SimulationLog.jsx    ← Tabel log penelusuran langkah-demi-langkah
 │   └── Navbar.jsx           ← Header logo & tombol toggle Light/Dark Mode
 ├── tabs/
 │   ├── DFASimulator.jsx     ← Modul Feature 1: DFA simulator & pemutar langkah
-│   ├── RegexToNFA.jsx       ← Modul Feature 2: Thompson Construction & NFA simulator
-│   ├── DFAMinimizer.jsx     ← Modul Feature 3: Side-by-side graph DFA minimizer
-│   └── DFAEquivalence.jsx   ← Modul Feature 4: Equivalence checker & product graph
+│   ├── NFASimulator.jsx     ← Modul Feature 2: NFA simulator & pemutar langkah (Subset & Epsilon)
+│   ├── RegexToNFA.jsx       ← Modul Feature 3: Thompson Construction & NFA simulator
+│   ├── DFAMinimizer.jsx     ← Modul Feature 4: Side-by-side graph DFA minimizer
+│   └── DFAEquivalence.jsx   ← Modul Feature 5: Equivalence checker & product graph
 └── lib/
     ├── dfaEngine.js         ← Logika eksekusi DFA & Bahasa Indonesia reason generator
     ├── nfaEngine.js         ← Logika NFA epsilon closure & subset simulation

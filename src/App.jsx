@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Navbar from './components/Navbar';
 import DFASimulator from './tabs/DFASimulator';
+import NFASimulator from './tabs/NFASimulator';
 import RegexToNFA from './tabs/RegexToNFA';
 import DFAMinimizer from './tabs/DFAMinimizer';
 import DFAEquivalence from './tabs/DFAEquivalence';
@@ -25,6 +26,8 @@ export default function App() {
     switch (activeTab) {
       case 'dfa-simulator':
         return <DFASimulator />;
+      case 'nfa-simulator':
+        return <NFASimulator />;
       case 'regex-nfa':
         return <RegexToNFA />;
       case 'dfa-minimizer':
