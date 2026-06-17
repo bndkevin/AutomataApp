@@ -108,20 +108,76 @@ export default function NFASimulator() {
     };
   }, [isPlaying, activeStep, simulationResult]);
 
-  // Get active states for visual NFA highlighting
-  const getActiveGraphStates = () => {
+  // Get active states and transition edges for visual NFA highlighting
+  const getActiveGraphElements = () => {
     if (!simulationResult || simulationResult.trace.length === 0) {
-      return null;
+      return { activeNodes: null, activeEdges: null };
     }
 
     const currentTrace = simulationResult.trace[activeStep];
-    if (!currentTrace) return null;
+    if (!currentTrace) return { activeNodes: null, activeEdges: null };
 
-    return currentTrace.nextStates;
+    // At step 0, only start nodes are active, no edge has been traversed yet
+    if (activeStep === 0) {
+      return {
+        activeNodes: currentTrace.nextStates,
+        activeEdges: null
+      };
+    }
+
+    const prevTrace = simulationResult.trace[activeStep - 1];
+    const prevStates = prevTrace ? prevTrace.nextStates : [];
+    const currentSymbol = currentTrace.symbol;
+
+    const activeEdges = [];
+
+    // 1. Symbol transitions from prevStates
+    prevStates.forEach(s => {
+      const stateTrans = nfa.transitions[s];
+      if (stateTrans) {
+        const targets = stateTrans[currentSymbol] || [];
+        const targetsArray = Array.isArray(targets) ? targets : [targets];
+        targetsArray.forEach(t => {
+          if (t && t !== "Ø") {
+            activeEdges.push({
+              source: s,
+              target: t,
+              symbol: currentSymbol
+            });
+          }
+        });
+      }
+    });
+
+    // 2. Epsilon transitions traversed during epsilon closure to reach nextStates
+    currentTrace.nextStates.forEach(t => {
+      nfa.states.forEach(s => {
+        const stateTrans = nfa.transitions[s];
+        if (stateTrans) {
+          const epsTargets = stateTrans[""] || stateTrans["ε"] || [];
+          const epsTargetsArray = Array.isArray(epsTargets) ? epsTargets : [epsTargets];
+          if (epsTargetsArray.includes(t)) {
+            // Epsilon transitions are active if the source s is in the active set
+            if (currentTrace.nextStates.includes(s) || prevStates.includes(s)) {
+              activeEdges.push({
+                source: s,
+                target: t,
+                symbol: "ε"
+              });
+            }
+          }
+        }
+      });
+    });
+
+    return {
+      activeNodes: currentTrace.nextStates,
+      activeEdges: activeEdges.length > 0 ? activeEdges : null
+    };
   };
 
-  const activeNodeStates = getActiveGraphStates();
-  const { nodes, edges } = getFlowElements(nfa, activeNodeStates, null);
+  const { activeNodes, activeEdges } = getActiveGraphElements();
+  const { nodes, edges } = getFlowElements(nfa, activeNodes, activeEdges);
 
   return (
     <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 max-w-7xl mx-auto w-full p-4 flex-1">

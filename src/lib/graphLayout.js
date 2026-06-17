@@ -98,18 +98,22 @@ export function getFlowElements(automaton, activeNode = null, activeEdge = null)
     const edgeId = `e-${source}-${label}-${target}`;
     
     // Check if this edge is active
-    // An edge is active if activeEdge contains { source, target, symbol }
+    // An edge is active if activeEdge contains { source, target, symbol } (or array of such)
     let isActive = false;
     if (activeEdge) {
-      const activeSource = activeEdge.source;
-      const activeTarget = activeEdge.target;
-      const activeSymbol = activeEdge.symbol === "" ? "ε" : activeEdge.symbol;
+      const activeEdgesArray = Array.isArray(activeEdge) ? activeEdge : [activeEdge];
+      isActive = activeEdgesArray.some(ae => {
+        const activeSource = ae.source;
+        const activeTarget = ae.target;
+        const activeSymbol = ae.symbol === "" ? "ε" : ae.symbol;
 
-      if (source === activeSource && target === activeTarget) {
-        if (activeSymbol === null || activeSymbol === undefined || labelList.includes(activeSymbol)) {
-          isActive = true;
+        if (source === activeSource && target === activeTarget) {
+          if (activeSymbol === null || activeSymbol === undefined || labelList.includes(activeSymbol)) {
+            return true;
+          }
         }
-      }
+        return false;
+      });
     }
 
     const edge = {
