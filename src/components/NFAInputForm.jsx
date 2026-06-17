@@ -33,14 +33,22 @@ export default function NFAInputForm({
       setAlphabetInput(alphabet.join(', '));
     }
 
-    // Build local cellTexts from transitions
-    const newCellTexts = {};
+    // Build local cellTexts from transitions only if they are structurally different
+    const newCellTexts = { ...cellTexts };
+    let hasChanged = false;
     states.forEach(s => {
       // alphabet symbols
       alphabet.forEach(sym => {
         const key = `${s}-${sym}`;
         const val = transitions[s]?.[sym] || [];
-        newCellTexts[key] = Array.isArray(val) ? val.join(', ') : val;
+        const currentText = cellTexts[key] || "";
+        const parsedCurrent = currentText.split(',').map(x => x.trim()).filter(x => x !== "");
+        const isSame = val.length === parsedCurrent.length && val.every((v, idx) => v === parsedCurrent[idx]);
+        
+        if (!isSame) {
+          newCellTexts[key] = Array.isArray(val) ? val.join(', ') : val;
+          hasChanged = true;
+        }
       });
       // epsilon symbol
       const epsKey = `${s}-ε`;
@@ -48,9 +56,19 @@ export default function NFAInputForm({
       const finalEpsVal = Array.isArray(epsVal) 
         ? epsVal 
         : (epsVal ? [epsVal] : []);
-      newCellTexts[epsKey] = finalEpsVal.join(', ');
+      const currentText = cellTexts[epsKey] || "";
+      const parsedCurrent = currentText.split(',').map(x => x.trim()).filter(x => x !== "");
+      const isSame = finalEpsVal.length === parsedCurrent.length && finalEpsVal.every((v, idx) => v === parsedCurrent[idx]);
+
+      if (!isSame) {
+        newCellTexts[epsKey] = finalEpsVal.join(', ');
+        hasChanged = true;
+      }
     });
-    setCellTexts(newCellTexts);
+
+    if (hasChanged || Object.keys(cellTexts).length === 0) {
+      setCellTexts(newCellTexts);
+    }
   }, [states, alphabet, transitions]);
 
   // Handle parsing of states comma-separated text
