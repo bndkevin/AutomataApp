@@ -82,7 +82,7 @@ export function checkDFAEquivalence(dfa1, dfa2) {
 
       productTransitions[pairKey][sym] = nextPairKey;
 
-      if (!visited.has(nextPairKey) && effectiveNext1 !== "Ø" && effectiveNext2 !== "Ø") {
+      if (!visited.has(nextPairKey)) {
         visited.add(nextPairKey);
         queue.push({
           s1: effectiveNext1,

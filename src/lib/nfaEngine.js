@@ -99,7 +99,9 @@ export function runNFA(nfa, inputString) {
         const targets = stateTransitions[symbol] || [];
         const targetsArray = Array.isArray(targets) ? targets : [targets];
         for (const t of targetsArray) {
-          nextSet.add(t);
+          if (t && t !== "Ø" && t !== "") {
+            nextSet.add(t);
+          }
         }
       }
     }
